@@ -34,7 +34,7 @@ const{setIsSeller}=useAppContext()
             <div className="md:w-64 w-16 border-r h-[550px] text-base border-gray-300 pt-4 flex flex-col transition-all duration-300">
                 {sidebarLinks.map((item) => (
                     <NavLink to={item.path} key={item.name} end={item.path === "/seller"}
-                        class={({isActive})=>`flex items-center py-3 px-4 gap-3 
+                        className={({isActive})=>`flex items-center py-3 px-4 gap-3 
                             ${isActive ? "border-r-4 md:border-r-[6px] bg-primary/10 border-primary text-primary"
                                 : "hover:bg-gray-100/90 border-white"
                             }`
