@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import product from "./product";
+import product from "./Product.js";
 
 const orderSchema =new mongoose.Schema({
     userId: {type:String,required:true,ref:'user'},
@@ -13,6 +13,6 @@ const orderSchema =new mongoose.Schema({
     paymentType:{type:String,required:true},
     isPaid:{type:Boolean,required:true,default:false},
 },{timestamps:true})
-const Order=ongoose.models.order || mongoose.model('order',orderSchema)
+const Order= mongoose.models.order || mongoose.model('order',orderSchema)
 
 export default Order;

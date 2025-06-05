@@ -7,6 +7,6 @@ const orderRouter=express.Router();
 
 orderRouter.post('/code',authUser,placeOrderCOD)
 orderRouter.get('/user',authUser,getUserOrders)
-orderRouter.get('/seller',authUser,getAllOrders)1
+orderRouter.get('/seller',authUser,getAllOrders)
 
 export default orderRouter;
