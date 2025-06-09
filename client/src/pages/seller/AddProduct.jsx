@@ -44,7 +44,7 @@ const AddProduct = () => {
                 toast.error(data.message);
              }
         } catch (error) {
-            
+            toast.error(data.message);
         }
        
     }
@@ -60,7 +60,7 @@ const AddProduct = () => {
                                 <input 
                                 onChange={(e)=>{
                                     const updatedFiles=[...files];
-                                    updatedFiles.index(e.target.files[0])
+                                    updatedFiles[index] = e.target.files[0]; 
                                     setFiles(updatedFiles)
                                 }} type="file" id={`image${index}`} hidden />
 
