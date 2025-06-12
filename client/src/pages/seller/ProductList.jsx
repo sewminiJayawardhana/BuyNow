@@ -2,14 +2,18 @@ import React from 'react'
 import { useAppContext } from '../../context/AppContext'
 import axios from 'axios';
 import toast from 'react-hot-toast';
-
+    
 
 const ProductList = () => {
     const {products,currency}=useAppContext()
 
     const toggleStock =async(id,inStock)=>{
         try {
-            const {data} = await axios.get('/api/product/stock',{id,inStock})
+            //const {data} = await axios.get('/api/product/stock',{id,inStock})
+            const { data } = await axios.get('/api/product/stock', {
+  params: { id, inStock }
+});
+
             if(data.success){
                 toast.success(data.message);
                 fetchProducts(); // Refresh the product list
