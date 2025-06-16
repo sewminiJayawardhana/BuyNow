@@ -1,5 +1,7 @@
 import React from 'react'
 import { useAppContext } from '../context/AppContext';
+import toast from 'react-hot-toast';
+
 
 const Login = () => {
 
@@ -18,18 +20,16 @@ const Login = () => {
                 name,email,password
             });
             if(data.success){
-                navigate('/')
-                setUser(data.user)
-                setShowUserLogin(false)
+                navigate('/');
+                setUser(data.user);
+                setShowUserLogin(false);
             }else{
                 toast.error(data.message)
             }
             
         } catch (error) {
-            toast.error(error.message)
+            toast.error(error.message);
         }
-        
-        
         
     }
   return (
