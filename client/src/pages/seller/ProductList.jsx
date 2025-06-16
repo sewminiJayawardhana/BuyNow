@@ -5,25 +5,22 @@ import toast from 'react-hot-toast';
     
 
 const ProductList = () => {
-    const {products,currency}=useAppContext()
+    const {products,currency,axios,fetchProducts}=useAppContext()
 
-    const toggleStock =async(id,inStock)=>{
+    const toggleStock = async(id, inStock)=>{
         try {
-            //const {data} = await axios.get('/api/product/stock',{id,inStock})
-            const { data } = await axios.get('/api/product/stock', {
-  params: { id, inStock }
-});
-
+            const{data}= await axios.post('/api/product/stock' , {id, inStock});
             if(data.success){
-                toast.success(data.message);
-                fetchProducts(); // Refresh the product list
+                fetchProducts();
+                toast.success(data.message)
             }else{
-                toast.error(data.message);
+                toast.error(data.message)
             }
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message)
         }
     }
+
   return (
     <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll flex flex-col justify-between">
             <div className="w-full md:p-10 p-4">
