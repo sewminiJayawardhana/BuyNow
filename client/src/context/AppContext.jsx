@@ -124,6 +124,24 @@ export const AppContextProvider = ({ children }) => {
         fetchSeller()
         fetchProducts()
     },[])
+    
+    //Update Database cart items 
+    useEffect(() => {
+        const updateCart =async()=>{
+            try {
+                const {data} =await axios.post('/api/cart/update',{cartItems, userId: user._id});
+                if(!data.success){
+                    toast.error( data.message)
+            } 
+            } catch (error) {
+                toast.error( error.message)
+            }
+        }
+
+        if(user){
+            updateCart()
+        }
+    },[cartItems])
 
     const value={navigate, user, setUser, isSeller, setIsSeller,
         showUserLogin, setShowUserLogin,products,currency,addToCart,
