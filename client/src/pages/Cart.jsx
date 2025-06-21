@@ -40,10 +40,6 @@ const Cart = () => {
 
     const placeOrder=async()=>{
         try {
-            if (!user || !user._id) {
-            return toast.error("User not found. Please login again.");
-        }
-       
             if(!selectedAddress){
                 return toast.error("Please select an address");
             }
