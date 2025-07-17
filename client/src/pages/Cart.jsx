@@ -36,8 +36,6 @@ const Cart = () => {
             toast.error(error.message)
         }
     }
-
-
     const placeOrder=async()=>{
         try {
             if(!selectedAddress){

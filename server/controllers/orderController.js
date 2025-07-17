@@ -137,7 +137,7 @@ export const stripeWebhook = async (request,response) => {
             break;
         }
          case "payment_intent.payment_failed":{
-            onst paymentIntent =event.data.object;
+            const paymentIntent =event.data.object;
             const paymentIntentId =paymentIntent.id;
 
             //Getting Session Metadata
