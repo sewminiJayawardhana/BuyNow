@@ -21,7 +21,6 @@ import Orders from './pages/seller/Orders';
 import Loading from './components/Loading';
 
 
-
 const App = () => {
 
   const isSellerPath=useLocation().pathname.includes("seller");

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import{useAppContext} from "../context/AppContext";
-import { assets, dummyAddress } from "../assets/assets";
+import { assets} from "../assets/assets";
 import toast from "react-hot-toast";
 
 
@@ -21,9 +21,11 @@ const Cart = () => {
         }
         setCartArray(tempArray)
     }
-    const getUserAddress=async()=>{
+    const getUserAddress=async(userId)=>{
         try {
-            const {data}=await axios.get('/api/address/get');
+            const {data}=await axios.get('/api/address/get',{
+                param:{userId}
+            });
             if(data.success){
                 setAddresses(data.addresses)
                 if(data.addresses.length>0){

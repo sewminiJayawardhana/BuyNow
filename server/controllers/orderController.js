@@ -73,7 +73,7 @@ export const placeOrderStripe=async(req,res)=>{
     const line_items = productData.map((item) => {
         return {
             price_data :{
-                currency : "SLR",
+                currency : "LKR",
                 product_data :{
                     name :item.name,
                 },
@@ -159,7 +159,7 @@ export const stripeWebhook = async (request,response) => {
 //Get Orders by User ID : /api/order/user
 export const getUserOrders =async(req,res)=>{
     try {
-        const{userId}=req.body;
+        const{userId}=req.userId;
         const orders =await Order.find({
             userId,
             $or:[{paymentType:"COD"},{isPaid:true}]
