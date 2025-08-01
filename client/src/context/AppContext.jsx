@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { dummyProducts } from '../assets/assets';
 import { toast } from 'react-hot-toast';
 import axios from "axios";
 
@@ -129,7 +128,7 @@ export const AppContextProvider = ({ children }) => {
     useEffect(() => {
         const updateCart =async()=>{
             try {
-                const {data} =await axios.post('/api/cart/update',{cartItems});
+                const {data} =await axios.post('/api/cart/update', {userId: user._id,cartItems});
                 if(!data.success){
                     toast.error( data.message)
                 } 

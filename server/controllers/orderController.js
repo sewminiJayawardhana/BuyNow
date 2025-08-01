@@ -101,7 +101,7 @@ export const placeOrderStripe=async(req,res)=>{
     }
 }
 // sTRIPE wEBHOOKS TO VERIFY  payement Action : /stripe
-export const stripeWebhook = async (request,response) => {
+export const stripeWebhooks = async (request,response) => {
     //Stripe Gateway Initialize
     const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -159,7 +159,7 @@ export const stripeWebhook = async (request,response) => {
 //Get Orders by User ID : /api/order/user
 export const getUserOrders =async(req,res)=>{
     try {
-        const{userId}=req.userId;
+        const userId=req.userId;
         const orders =await Order.find({
             userId,
             $or:[{paymentType:"COD"},{isPaid:true}]
