@@ -3,12 +3,24 @@ import Address from "../models/Address.js";
 //Add address : /api/address/add
 export const addAddress=async(req,res)=>{
     try {
-        const{address,userId}=req.body
-        await Address.create({...address,userId})
-        res.json({success:true,message:"Address added successfully"})
+       
+        
+        // The address data is now directly in req.body, not nested in an address property
+        const addressData = req.body;
+        const userId = req.userId; // Get userId from auth middleware
+        
+        if (!userId) {
+            return res.json({success:false, message: "Authentication failed. User ID not found."});
+        }
+        
+        
+        
+        // Create address with the address fields from req.body plus userId
+        await Address.create({...addressData, userId});
+        res.json({success:true, message:"Address added successfully"})
     } catch (error) {
-        console.log(error.message);
-        res.json({success:false,message: error.message});
+        
+        res.json({success:false, message: error.message});
     }  
 }
 
