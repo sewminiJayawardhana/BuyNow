@@ -120,8 +120,8 @@ const Cart = () => {
                                         <select onChange={e=> updateCartItem (product._id,Number(e.target.value))} 
                                         value={cartItems[product._id]}
                                         className='outline-none'>
-                                            {Array(cartItems[product._id]> 9 ? cartItems[product._id] :9).fill('').map((_, index) => (
-                                                <option key={index} value={index + 1}>{index + 1}</option>
+                                            {Array.from({ length: product.stock !== undefined ? Math.min(product.stock, 9) : 9 }, (_, index) => index + 1).map((qty) => (
+                                                <option key={qty} value={qty}>{qty}</option>
                                             ))}
                                         </select>
                                     </div>

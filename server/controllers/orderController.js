@@ -11,14 +11,27 @@ export const placeOrderCOD=async(req,res)=>{
         if(!address||items.length===0){
             return res.json({success:false,message:"Invalid data"})
         }
-        //Calculate Amount Using Items
-        let amount=await items.reduce(async(acc,item)=>{
-            const product=await Product.findById(item.product);
-            return(await acc)+product.offerPrice * item.quantity;
-        },0)
+        //Calculate Amount and update stock
+        let amount = 0;
+        for (const item of items) {
+            const product = await Product.findById(item.product);
+            if (!product) {
+                return res.json({success:false,message:`Product ${item.product} not found`});
+            }
+            amount += product.offerPrice * item.quantity;
 
-    // Add tax Charge (2%)
-    amount +=Math.floor(amount * 0.02);
+            // Deduct stock
+            if (product.stock !== undefined) {
+                product.stock = Math.max(0, product.stock - item.quantity);
+                if (product.stock === 0) {
+                    product.inStock = false;
+                }
+                await product.save();
+            }
+        }
+
+        // Add tax Charge (2%)
+        amount += Math.floor(amount * 0.02);
 
     await Order.create({
         userId,
@@ -46,19 +59,32 @@ export const placeOrderStripe=async(req,res)=>{
         }
 
         let productData=[];
-        //Calculate Amount Using Items
-        let amount=await items.reduce(async(acc,item)=>{
-            const product=await Product.findById(item.product);
+        //Calculate Amount Using Items and update stock
+        let amount = 0;
+        for (const item of items) {
+            const product = await Product.findById(item.product);
+            if (!product) {
+                return res.json({success:false,message:`Product ${item.product} not found`});
+            }
             productData.push({
                 name :product.name,
                 price :product.offerPrice,
                 quantity :item.quantity,
             });
-            return(await acc)+product.offerPrice * item.quantity;
-        },0)
+            amount += product.offerPrice * item.quantity;
 
-    // Add tax Charge (2%)
-    amount +=Math.floor(amount * 0.02);
+            // Deduct stock
+            if (product.stock !== undefined) {
+                product.stock = Math.max(0, product.stock - item.quantity);
+                if (product.stock === 0) {
+                    product.inStock = false;
+                }
+                await product.save();
+            }
+        }
+
+        // Add tax Charge (2%)
+        amount += Math.floor(amount * 0.02);
 
     const order=await Order.create({
         userId,

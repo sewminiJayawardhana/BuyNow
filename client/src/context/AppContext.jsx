@@ -65,6 +65,13 @@ export const AppContextProvider = ({ children }) => {
     //Add product to cart
     const addToCart=(itemId)=>{
         let cartData=structuredClone(cartItems);
+        const product = products.find((item)=>item._id===itemId);
+        const currentQty = cartData[itemId] || 0;
+
+        if (product && product.stock !== undefined && currentQty >= product.stock) {
+            toast.error(`Only ${product.stock} ${product.unit || 'items'} available in stock.`);
+            return;
+        }
 
         if(cartData[itemId]){
             cartData[itemId] +=1;
@@ -78,6 +85,13 @@ export const AppContextProvider = ({ children }) => {
     //Update cart item quantity
     const updateCartItem=(itemId,quantity)=>{
         let cartData=structuredClone(cartItems);
+        const product = products.find((item)=>item._id===itemId);
+
+        if (product && product.stock !== undefined && quantity > product.stock) {
+            toast.error(`Only ${product.stock} ${product.unit || 'items'} available in stock.`);
+            return;
+        }
+
         cartData[itemId] = quantity;
         setCartItems(cartData);
         toast.success("Cart Updated")

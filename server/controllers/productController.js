@@ -51,8 +51,42 @@ export const productById=async(req,res)=>{
 export const changeStock=async(req,res)=>{
     try {
         const{id,inStock}=req.body
+        const product = await Product.findById(id);
+        if (inStock && product && product.stock === 0) {
+            return res.json({success:false,message:"Cannot make a sold-out product In Stock. Please update its stock count first."})
+        }
         await Product.findByIdAndUpdate(id,{inStock})
         res.json({success:true,message:"Stock Updated."})
+    } catch (error) {
+        console.log(error.message);
+        res.json({success:false,message:error.message})
+    }
+}
+
+//Edit Product: /api/product/edit
+export const editProduct=async(req,res)=>{
+    try {
+        const{id,name,offerPrice,price,category,stock,unit,inStock}=req.body
+        
+        if (inStock && Number(stock) === 0) {
+            return res.json({success:false,message:"Cannot make a sold-out product In Stock. Please update its stock count first."})
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(id,{
+            name,
+            offerPrice: Number(offerPrice),
+            price: Number(price),
+            category,
+            stock: Number(stock),
+            unit,
+            inStock
+        }, {new: true})
+
+        if(!updatedProduct){
+            return res.json({success:false,message:"Product not found."})
+        }
+
+        res.json({success:true,message:"Product Updated Successfully",product:updatedProduct})
     } catch (error) {
         console.log(error.message);
         res.json({success:false,message:error.message})

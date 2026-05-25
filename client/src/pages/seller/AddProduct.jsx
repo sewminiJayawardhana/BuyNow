@@ -11,19 +11,23 @@ const AddProduct = () => {
     const[category,setCategory]=useState('');
     const[price,setPrice]=useState('');
     const[offerPrice,setOfferPrice]=useState('');
+    const[stock,setStock]=useState('');
+    const[unit,setUnit]=useState('count');
 
     const{axios}=useAppContext()
 
     const onSubmitHandler=async(event)=>{
         try {
              event.preventDefault();
-             const productData={
+              const productData={
                 name,
                 description: description.split('\n'),
                 category,
                 price,
-                offerPrice
-             }
+                offerPrice,
+                stock: Number(stock),
+                unit
+              }
 
              const formData=new FormData();
              formData.append('productData',JSON.stringify(productData));
@@ -34,17 +38,19 @@ const AddProduct = () => {
 
              if(data.success){
                 toast.success(data.message);
-                setName('');
-                setDescription('');
-                setCategory('');
-                setPrice('');
-                setOfferPrice('');
-                setFiles([]);
+                 setName('');
+                 setDescription('');
+                 setCategory('');
+                 setPrice('');
+                 setOfferPrice('');
+                 setStock('');
+                 setUnit('number');
+                 setFiles([]);
              }else{
                 toast.error(data.message);
              }
         } catch (error) {
-            toast.error(data.message);
+            toast.error(error.message);
         }
        
     }
@@ -99,6 +105,23 @@ const AddProduct = () => {
                         <label className="text-base font-medium" htmlFor="offer-price">Offer Price</label>
                         <input onChange={(e)=>setOfferPrice(e.target.value)} value={offerPrice}
                         id="offer-price" type="number" placeholder="0" className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required />
+                    </div>
+                </div>
+                 <div className="flex items-center gap-5 flex-wrap">
+                    <div className="flex-1 flex flex-col gap-1 w-32">
+                        <label className="text-base font-medium" htmlFor="product-stock">Stock Quantity</label>
+                        <input onChange={(e)=>setStock(e.target.value)} value={stock}
+                        id="product-stock" type="number" placeholder="0" className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required />
+                    </div>
+                    <div className="flex-1 flex flex-col gap-1 w-32">
+                        <label className="text-base font-medium" htmlFor="product-unit">Unit</label>
+                        <select onChange={(e)=>setUnit(e.target.value)} value={unit}
+                        id="product-unit" className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required>
+                             <option value="count">count</option>
+                             <option value="grams">grams</option>
+                             <option value="kilograms">kilograms</option>
+                             <option value="litres">litres</option>
+                        </select>
                     </div>
                 </div>
                 <button className="px-8 py-2.5 bg-primary text-white font-medium rounded cursor-pointer">ADD</button>
