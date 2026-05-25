@@ -6,7 +6,8 @@ import User from "../models/User.js";
 //Place Order COD : /api/order/cod
 export const placeOrderCOD=async(req,res)=>{
     try {
-        const{userId,items,address}=req.body;
+        const userId = req.userId;
+        const{items,address}=req.body;
         if(!address||items.length===0){
             return res.json({success:false,message:"Invalid data"})
         }
@@ -36,7 +37,8 @@ export const placeOrderCOD=async(req,res)=>{
 //Place Order Stripe : /api/order/stripe
 export const placeOrderStripe=async(req,res)=>{
     try {
-        const{userId,items,address}=req.body;
+        const userId = req.userId;
+        const{items,address}=req.body;
         const{origin}=req.headers;
 
         if(!address||items.length===0){
@@ -65,6 +67,9 @@ export const placeOrderStripe=async(req,res)=>{
         address,
         paymentType:"Online",
     });
+
+    // Clear user cart in DB immediately
+    await User.findByIdAndUpdate(userId, {cartItems:{}});
 
     //Stripe Gateway Initialize
     const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
@@ -162,7 +167,6 @@ export const getUserOrders =async(req,res)=>{
         const userId=req.userId;
         const orders =await Order.find({
             userId,
-            $or:[{paymentType:"COD"},{isPaid:true}]
         }).populate("items.product address").sort({createdAt:-1});
         res.json({success:true,orders});
     } catch (error) {
@@ -173,9 +177,7 @@ export const getUserOrders =async(req,res)=>{
 // Get all Orders (for seller /admin):/api/order/seller
 export const getAllOrders =async(req,res)=>{
     try {
-        const orders =await Order.find({
-            $or:[{paymentType:"COD"},{isPaid:true}]
-        }).populate("items.product address").sort({createdAt:-1});
+        const orders =await Order.find({}).populate("items.product address").sort({createdAt:-1});
         res.json({success:true,orders});
     } catch (error) {
         res.json({success:false,message:error.message});

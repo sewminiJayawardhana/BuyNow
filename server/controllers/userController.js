@@ -30,7 +30,7 @@ export const register= async (req, res) => {
             sameSite:process.env.NODE_ENV === 'production' ? 'none' : 'strict', //Allow cross-site cookies in production
             maxAge:7 * 24 * 60 * 60 * 1000 , //7 days
         })
-        return res.json({success:true,user:{email:user.email,name:user.name}})
+        return res.json({success:true,user:{_id:user._id,email:user.email,name:user.name}})
     }catch (error) {
         console.log(error.message);
         res.json({success:false,message: error.message});
@@ -62,7 +62,7 @@ export const login = async (req, res) =>{
             sameSite:process.env.NODE_ENV === 'production' ? 'none' : 'strict', 
             maxAge:7 * 24 * 60 * 60 * 1000 , 
         })
-        return res.json({success:true,user:{email:user.email,name:user.name}})
+        return res.json({success:true,user:{_id:user._id,email:user.email,name:user.name}})
 
     }catch(error){
         console.log(error.message);
