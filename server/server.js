@@ -23,8 +23,14 @@ await connectCloudinary();
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
 // ✅ CORS FIRST
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [])
+];
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: allowedOrigins,
   credentials: true
 }));
 
