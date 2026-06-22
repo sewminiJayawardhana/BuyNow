@@ -26,6 +26,7 @@ app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://buy-now-hazel.vercel.app',
   ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [])
 ];
 
